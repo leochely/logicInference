@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 # Name:        check_true_false
-# Purpose:     Main entry into logic program. Reads input files, creates 
+# Purpose:     Main entry into logic program. Reads input files, creates
 #              base, tests statement, and generates result file.
 #
 # Created:     09/25/2011
-# Last Edited: 07/22/2013     
-# Notes:       *Ported by Christopher Conly from C++ code supplied by Dr. 
+# Last Edited: 07/22/2013
+# Notes:       *Ported by Christopher Conly from C++ code supplied by Dr.
 #               Vassilis Athitsos.
 #              *Several integer and string variables are put into lists. This is
 #               to make them mutable so each recursive call to a function can
@@ -15,14 +15,16 @@
 #               pass the address of the variables, so I put it in a list, which
 #               is passed by reference.
 #              *Written to be Python 2.4 compliant for omega.uta.edu
-#-------------------------------------------------------------------------------
+# -------------------------------------------------------------------------------
 
 import sys
 from logical_expression import *
 
+
 def main(argv):
     if len(argv) != 4:
-        print('Usage: %s [wumpus-rules-file] [additional-knowledge-file] [input_file]' % argv[0])
+        print(
+            'Usage: %s [wumpus-rules-file] [additional-knowledge-file] [input_file]' % argv[0])
         sys.exit(0)
 
     # Read wumpus rules file
@@ -33,14 +35,15 @@ def main(argv):
         sys.exit(0)
 
     # Create the knowledge base with wumpus rules
-    print '\nLoading wumpus rules...'
+    print('\nLoading wumpus rules...')
     knowledge_base = logical_expression()
     knowledge_base.connective = ['and']
     for line in input_file:
         # Skip comments and blank lines. Consider all line ending types.
         if line[0] == '#' or line == '\r\n' or line == '\n' or line == '\r':
             continue
-        counter = [0]  # A mutable counter so recursive calls don't just make a copy
+        # A mutable counter so recursive calls don't just make a copy
+        counter = [0]
         subexpression = read_expression(line.rstrip('\r\n'), counter)
         knowledge_base.subexpressions.append(subexpression)
     input_file.close()
@@ -53,7 +56,7 @@ def main(argv):
         sys.exit(0)
 
     # Add expressions to knowledge base
-    print 'Loading additional knowledge...'
+    print('Loading additional knowledge...')
     for line in input_file:
         # Skip comments and blank lines. Consider all line ending types.
         if line[0] == '#' or line == '\r\n' or line == '\n' or line == '\r':
@@ -76,25 +79,24 @@ def main(argv):
     except:
         print('failed to open file %s' % argv[3])
         sys.exit(0)
-    print 'Loading statement...'
+    print('Loading statement...')
     statement = input_file.readline().rstrip('\r\n')
     input_file.close()
-    
+
     # Convert statement into a logical expression and verify it is valid
     statement = read_expression(statement)
     if not valid_expression(statement):
         sys.exit('invalid statement')
 
     # Show us what the statement is
-    print '\nChecking statement: ',
+    print('\nChecking statement: ')
     print_expression(statement, '')
-    print
 
     # Run the statement through the inference engine
     check_true_false(knowledge_base, statement)
 
     sys.exit(1)
-    
+
 
 if __name__ == '__main__':
     main(sys.argv)

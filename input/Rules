@@ -1,0 +1,42 @@
+#Squares (1,1), (1,2), (2,1), (2,2) have no monsters and no pits.
+(not P_1_1)
+(not P_1_2)
+(not P_2_1)
+(not P_2_2)
+(not M_1_1)
+(not M_1_2)
+(not M_2_1)
+(not M_2_2)
+(not B_1_1)
+(not S_1_1)
+
+(iff M_1_3 (and S_1_2 S_1_4 S_2_3) 
+
+...
+
+
+(if S_1_2 M_1_3)
+(if S_2_1 M_3_1)
+
+
+(if S_2_2 (xor M_2_3 M_3_2))
+
+...
+
+
+(if P_1_3 (and B_1_2 B_1_4 B_2_3) 
+
+...
+
+(if B_1_2 P_1_3)
+(if B_2_1 P_3_1)
+
+(if B_2_2 (or P_2_3 P_3_2))
+
+#There is one and only one monster (no more, no fewer) and the monster cannot move.
+(if M_3_3 (and (not M_3_4) (not M_1) ..
+
+#there exist at least one safe square to explore other than the first four squares.
+(or (and (not P_1_3) (not M_1_3) ) (and (not P_1_4) (not M_1_4) ) (...)
+
+

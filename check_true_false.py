@@ -21,6 +21,10 @@ import sys
 from logical_expression import *
 
 
+def check_true_false(knowledge_base, statement):
+    return True
+
+
 def main(argv):
     if len(argv) != 4:
         print(
@@ -29,7 +33,7 @@ def main(argv):
 
     # Read wumpus rules file
     try:
-        input_file = open(argv[1], 'rb')
+        input_file = open(argv[1], 'r')
     except:
         print('failed to open file %s' % argv[1])
         sys.exit(0)
@@ -50,7 +54,7 @@ def main(argv):
 
     # Read additional knowledge base information file
     try:
-        input_file = open(argv[2], 'rb')
+        input_file = open(argv[2], 'r')
     except:
         print('failed to open file %s' % argv[2])
         sys.exit(0)
@@ -71,11 +75,11 @@ def main(argv):
         sys.exit('invalid knowledge base')
 
     # I had left this line out of the original code. If things break, comment out.
-    print_expression(knowledgebase, '\n')
+    # print_expression(knowledgebase, '\n')
 
     # Read statement whose entailment we want to determine
     try:
-        input_file = open(argv[3], 'rb')
+        input_file = open(argv[3], 'r')
     except:
         print('failed to open file %s' % argv[3])
         sys.exit(0)

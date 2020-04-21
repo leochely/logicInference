@@ -81,4 +81,4 @@
 (if M_4_3 (and (not M_1_3) (not M_1_4) (not M_2_3) (not M_2_4) (not M_3_1) (not M_3_2) (not M_3_4) (not M_4_1) (not M_4_2) (not M_3_3) (not M_4_4)))
 (if M_4_4 (and (not M_1_3) (not M_1_4) (not M_2_3) (not M_2_4) (not M_3_1) (not M_3_2) (not M_3_4) (not M_4_1) (not M_4_2) (not M_4_3) (not M_3_3))) 
 #there exist at least one safe square to explore other than the first four squares.
-(or (and (not P_3_1) (not M_3_1)) (and (not P_4_1) (not M_4_1)) (and (not P_3_2) (not M_3_2)) (and (not P_4_2) (not M_4_2)) (and (not P_1_3) (not M_1_3)) (and (not P_2_3) (not M_2_3)) (and (not P_3_3) (not M_3_3)) (and (not P_4_4) (not M_4_3)) (and (not P_1_4) (not M_1_4)) (and (not P_2_4) (not M_2_4)) (and (not P_3_4) (not M_3_4)) (and (not P_4_4) (not M_4_4))
+(or (and (not P_3_1) (not M_3_1)) (and (not P_4_1) (not M_4_1)) (and (not P_3_2) (not M_3_2)) (and (not P_4_2) (not M_4_2)) (and (not P_1_3) (not M_1_3)) (and (not P_2_3) (not M_2_3)) (and (not P_3_3) (not M_3_3)) (and (not P_4_4) (not M_4_3)) (and (not P_1_4) (not M_1_4)) (and (not P_2_4) (not M_2_4)) (and (not P_3_4) (not M_3_4)) (and (not P_4_4) (not M_4_4)))

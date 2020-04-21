@@ -12,7 +12,7 @@
 #Monster to stenches
 (iff M_3_1 (and S_2_1 S_4_1 S_3_2))
 (iff M_4_1 (and S_3_1 S_4_2))
-(iif M_3_2 (and S_3_1 S_2_2 S_4_2 S_3_3))
+(iff M_3_2 (and S_3_1 S_2_2 S_4_2 S_3_3))
 (iff M_4_2 (and S_4_1 S_3_2 S_4_3))
 (iff M_1_3 (and S_1_2 S_2_3 S_1_4))
 (iff M_2_3 (and S_2_2 S_1_3 S_3_3 S_2_4))

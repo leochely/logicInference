@@ -10,9 +10,9 @@
 (not B_1_1)
 (not S_1_1)
 
-(iff M_1_3 (and S_1_2 S_1_4 S_2_3) 
+(iff M_1_3 (and S_1_2 S_1_4 S_2_3)
 
-...
+... David
 
 
 (if S_1_2 M_1_3)
@@ -21,22 +21,54 @@
 
 (if S_2_2 (xor M_2_3 M_3_2))
 
-...
+... David
+
+# Pit to breezes
+(if P_1_3 (and B_1_2 B_1_4 B_2_3))
+(if P_1_4 (and B_2_4 B_1_3))
+(if P_2_3 (and B_1_3 B_2_4 B_2_2 B_3_3))
+(if P_3_3 (and B_3_2 B_3_4 B_4_3 B_2_3))
+(if P_3_2 (and B_3_3 B_3_1 B_2_2 B_4_2))
+(if P_3_1 (and B_2_1 B_4_1 B_3_2))
+(if P_2_4 (and B_1_4 B_2_3 B_4_3))
+(if P_3_4 (and B_2_4 B_3_3 B_4_4))
+(if P_4_2 (and B_4_1 B_3_2 B_4_3))
+(if P_4_3 (and B_4_2 B_3_3 B_4_4))
+(if P_4_4 (and B_3_4 B_4_3))
+(if P_4_1 (and B_4_2 B_3_1))
 
 
-(if P_1_3 (and B_1_2 B_1_4 B_2_3) 
-
-...
-
+# Breezes to pit
 (if B_1_2 P_1_3)
 (if B_2_1 P_3_1)
 
 (if B_2_2 (or P_2_3 P_3_2))
+(if B_2_3 (or P_1_3 P_3_3 P_4_2))
+(if B_3_2 (or P_3_1 P_3_3 P_2_4))
+(if B_3_1 (or P_3_2 P_4_1))
+(if B_1_3 (or P_2_3 P_1_4))
+(if B_1_4 (or P_1_3 P_2_4))
+(if B_4_1 (or P_3_1 P_4_2))
+(if B_2_4 (or P_1_4 P_2_3 P_3_4))
+(if B_4_2 (or P_4_1 P_3_2 P_4_3))
+(if B_3_3 (or P_2_3 P_3_2 P_3_4 P_4_3))
+(if B_3_4 (or P_2_4 P_4_4 P_3_3))
+(if B_4_3 (or P_4_2 P_4_4 P_3_3))
+(if B_4_4 (or P_3_4 P_4_3))
 
 #There is one and only one monster (no more, no fewer) and the monster cannot move.
-(if M_3_3 (and (not M_3_4) (not M_1) ..
+(if M_3_3 (and (not M_1_3) (not M_1_4) (not M_2_3) (not M_2_4) (not M_3_1) (not M_3_2) (not M_3_4) (not M_4_1) (not M_4_2) (not M_4_3) (not M_4_4)))
+(if M_1_3 (and (not M_3_3) (not M_1_4) (not M_2_3) (not M_2_4) (not M_3_1) (not M_3_2) (not M_3_4) (not M_4_1) (not M_4_2) (not M_4_3) (not M_4_4)))
+(if M_1_4 (and (not M_1_3) (not M_3_3) (not M_2_3) (not M_2_4) (not M_3_1) (not M_3_2) (not M_3_4) (not M_4_1) (not M_4_2) (not M_4_3) (not M_4_4)))
+(if M_2_3 (and (not M_1_3) (not M_1_4) (not M_3_3) (not M_2_4) (not M_3_1) (not M_3_2) (not M_3_4) (not M_4_1) (not M_4_2) (not M_4_3) (not M_4_4)))
+(if M_2_4 (and (not M_1_3) (not M_1_4) (not M_2_3) (not M_3_3) (not M_3_1) (not M_3_2) (not M_3_4) (not M_4_1) (not M_4_2) (not M_4_3) (not M_4_4)))
+(if M_3_4 (and (not M_1_3) (not M_1_4) (not M_2_3) (not M_2_4) (not M_3_1) (not M_3_2) (not M_3_3) (not M_4_1) (not M_4_2) (not M_4_3) (not M_4_4)))
+(if M_3_1 (and (not M_1_3) (not M_1_4) (not M_2_3) (not M_2_4) (not M_3_3) (not M_3_2) (not M_3_4) (not M_4_1) (not M_4_2) (not M_4_3) (not M_4_4)))
+(if M_3_2 (and (not M_1_3) (not M_1_4) (not M_2_3) (not M_2_4) (not M_3_1) (not M_3_3) (not M_3_4) (not M_4_1) (not M_4_2) (not M_4_3) (not M_4_4)))
+(if M_4_1 (and (not M_1_3) (not M_1_4) (not M_2_3) (not M_2_4) (not M_3_1) (not M_3_2) (not M_3_4) (not M_3_3) (not M_4_2) (not M_4_3) (not M_4_4)))
+(if M_4_2 (and (not M_1_3) (not M_1_4) (not M_2_3) (not M_2_4) (not M_3_1) (not M_3_2) (not M_3_4) (not M_4_1) (not M_3_3) (not M_4_3) (not M_4_4)))
+(if M_4_3 (and (not M_1_3) (not M_1_4) (not M_2_3) (not M_2_4) (not M_3_1) (not M_3_2) (not M_3_4) (not M_4_1) (not M_4_2) (not M_3_3) (not M_4_4)))
+(if M_4_4 (and (not M_1_3) (not M_1_4) (not M_2_3) (not M_2_4) (not M_3_1) (not M_3_2) (not M_3_4) (not M_4_1) (not M_4_2) (not M_4_3) (not M_3_3))) 
 
 #there exist at least one safe square to explore other than the first four squares.
 (or (and (not P_1_3) (not M_1_3) ) (and (not P_1_4) (not M_1_4) ) (...)
-
-

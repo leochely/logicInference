@@ -25,6 +25,7 @@
 
 import sys
 from copy import copy
+from itertools import chain
 
 # -------------------------------------------------------------------------------
 # Begin code that is ported from code provided by Dr. Athitsos
@@ -169,3 +170,50 @@ def valid_symbol(symbol):
 # -------------------------------------------------------------------------------
 
 # Add all your functions here
+
+
+def extract_symbols(expression, symbols):
+    if expression.symbol[0]:
+        return expression.symbol[0]
+    else:
+        for substatement in expression.subexpressions:
+            symbols.append(extract_symbols(substatement, symbols))
+
+
+def clean_list(duplicate):
+    final_list = []
+    for num in duplicate:
+        if num not in final_list and num is not None:
+            final_list.append(num)
+    return final_list
+
+
+def populate_truth_table(knowledge_base, truth_table):
+    for subexpression in knowledge_base.subexpressions:
+        if subexpression.connective == ['not']:
+            if subexpression.subexpressions[0].symbol[0]:
+                truth_table[subexpression.subexpressions[0].symbol[0]] = False
+        elif subexpression.connective == ['']:
+            if subexpression.subexpressions[0].symbol[0]:
+                truth_table[subexpression.symbol[0]] = True
+
+
+def entail(knowledge_base, truth_table, statement):
+    if statement.symbol[0]:
+        return truth_table[statement.symbol[0]]
+    elif statement.connective[0] == 'not':
+        return not entail(knowledge_base, truth_table, statement.subexpressions[0])
+    elif statement.connective[0] == 'or':
+        temp = []
+        for substatement in statement.subexpressions:
+            temp.append(entail(knowledge_base, truth_table, substatement))
+        return (True in temp)
+    elif statement.connective[0] == 'and':
+        temp = []
+        for substatement in statement.subexpressions:
+            temp += entail(knowledge_base, truth_table, substatement)
+        return (not False in temp)
+
+
+def check_true_false(knowledge_base, truth_table, statement):
+    return entail(knowledge_base, truth_table, statement)

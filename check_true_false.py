@@ -21,11 +21,9 @@ import sys
 from logical_expression import *
 
 
-def check_true_false(knowledge_base, statement):
-    return True
-
-
 def main(argv):
+    symbols = []
+
     if len(argv) != 4:
         print(
             'Usage: %s [wumpus-rules-file] [additional-knowledge-file] [input_file]' % argv[0])
@@ -75,7 +73,13 @@ def main(argv):
         sys.exit('invalid knowledge base')
 
     # I had left this line out of the original code. If things break, comment out.
-    # print_expression(knowledgebase, '\n')
+    print_expression(knowledge_base, '\n')
+
+    extract_symbols(knowledge_base, symbols)
+    symbols = clean_list(symbols)
+    truth_table = {k: None for _, k in enumerate(symbols)}
+
+    populate_truth_table(knowledge_base, truth_table)
 
     # Read statement whose entailment we want to determine
     try:
@@ -95,9 +99,10 @@ def main(argv):
     # Show us what the statement is
     print('\nChecking statement: ')
     print_expression(statement, '')
+    print('\n')
 
     # Run the statement through the inference engine
-    check_true_false(knowledge_base, statement)
+    print(check_true_false(knowledge_base, truth_table, statement))
 
     sys.exit(1)
 

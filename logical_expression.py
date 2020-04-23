@@ -251,4 +251,11 @@ def entail(knowledge_base, truth_table, statement):
 
 
 def check_true_false(knowledge_base, truth_table, statement):
-    return entail(knowledge_base, truth_table, statement)
+    result = entail(knowledge_base, truth_table, statement)
+    statement.connective[0]
+    if False not in result:
+        return 'Definitely True'
+    elif True not in result:
+        return 'Definitely False'
+    else:
+        return ''

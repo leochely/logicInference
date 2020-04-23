@@ -213,7 +213,19 @@ def entail(knowledge_base, truth_table, statement):
         for substatement in statement.subexpressions:
             temp += entail(knowledge_base, truth_table, substatement)
         return (not False in temp)
-
+    elif statement.connective[0] == 'if':
+        p = entail(knowledge_base, truth_table, statement.subexpressions[0])
+        q = entail(knowledge_base, truth_table, statement.subexpressions[1]))
+        if not p:
+            return True
+        elif p and q:
+            return True
+        else:
+            return False
+    elif statement.connective[0] == 'iff':
+        p=entail(knowledge_base, truth_table, statement.subexpressions[0])
+        q=entail(knowledge_base, truth_table, statement.subexpressions[1]))
+        return (p and q) or (not p and not q)
 
 def check_true_false(knowledge_base, truth_table, statement):
     return entail(knowledge_base, truth_table, statement)

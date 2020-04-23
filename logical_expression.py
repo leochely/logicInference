@@ -227,7 +227,7 @@ def entail(knowledge_base, truth_table, statement):
     elif statement.connective[0] == 'if':
         p = entail(knowledge_base, truth_table, statement.subexpressions[0])
         q = entail(knowledge_base, truth_table, statement.subexpressions[1])
-        temp = [p q]
+        temp = [p, q]
         possibilities = list(product(*temp))
         table = []
         for combination in possibilities:
@@ -241,7 +241,7 @@ def entail(knowledge_base, truth_table, statement):
     elif statement.connective[0] == 'iff':
         p = entail(knowledge_base, truth_table, statement.subexpressions[0])
         q = entail(knowledge_base, truth_table, statement.subexpressions[1])
-        temp = [p q]
+        temp = [p, q]
         possibilities = list(product(*temp))
         table = []
         for combination in possibilities:

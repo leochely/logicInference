@@ -25,7 +25,7 @@
 
 import sys
 from copy import copy
-from itertools import chain
+from itertools import chain, product
 
 # -------------------------------------------------------------------------------
 # Begin code that is ported from code provided by Dr. Athitsos
@@ -200,32 +200,54 @@ def populate_truth_table(knowledge_base, truth_table):
 
 def entail(knowledge_base, truth_table, statement):
     if statement.symbol[0]:
-        return truth_table[statement.symbol[0]]
+        if truth_table[statement.symbol[0]] is None:
+            return [True, False]
+        else:
+            return [truth_table[statement.symbol[0]]]
     elif statement.connective[0] == 'not':
-        return not entail(knowledge_base, truth_table, statement.subexpressions[0])
+        return [not n for n in entail(knowledge_base, truth_table, statement.subexpressions[0])]
     elif statement.connective[0] == 'or':
         temp = []
         for substatement in statement.subexpressions:
             temp.append(entail(knowledge_base, truth_table, substatement))
-        return (True in temp)
+        possibilities = list(product(*temp))
+        table = []
+        for combination in possibilities:
+            table.append(True in combination)
+        return table
     elif statement.connective[0] == 'and':
         temp = []
         for substatement in statement.subexpressions:
-            temp += entail(knowledge_base, truth_table, substatement)
-        return (not False in temp)
+            temp.append(entail(knowledge_base, truth_table, substatement))
+        possibilities = list(product(*temp))
+        table = []
+        for combination in possibilities:
+            table.append(not False in combination)
+        return table
     elif statement.connective[0] == 'if':
         p = entail(knowledge_base, truth_table, statement.subexpressions[0])
         q = entail(knowledge_base, truth_table, statement.subexpressions[1])
-        if not p:
-            return True
-        elif p and q:
-            return True
-        else:
-            return False
+        temp = [p q]
+        possibilities = list(product(*temp))
+        table = []
+        for combination in possibilities:
+            if not possibilities[0]:
+                table.append(True)
+            elif possibilities[0] and possibilities[1]:
+                table.append(True)
+            else:
+                table.append(False)
+        return table
     elif statement.connective[0] == 'iff':
         p = entail(knowledge_base, truth_table, statement.subexpressions[0])
         q = entail(knowledge_base, truth_table, statement.subexpressions[1])
-        return (p and q) or (not p and not q)
+        temp = [p q]
+        possibilities = list(product(*temp))
+        table = []
+        for combination in possibilities:
+            table.append(
+                (possibilities[0] and possibilities[1]) or (not possibilities[0] and not possibilities[1]))
+        return table
 
 
 def check_true_false(knowledge_base, truth_table, statement):

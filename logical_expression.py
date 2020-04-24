@@ -26,6 +26,7 @@
 import sys
 from copy import copy
 from itertools import chain, product
+from tt import BooleanExpression
 
 # -------------------------------------------------------------------------------
 # Begin code that is ported from code provided by Dr. Athitsos
@@ -144,9 +145,7 @@ def valid_expression(expression):
                   (expression.connective[0], len(expression.subexpressions)))
             return 0
 
-    elif expression.connective[0].lower() != 'and' and \
-            expression.connective[0].lower() != 'or' and \
-            expression.connective[0].lower() != 'xor':
+    elif expression.connective[0].lower() != 'and' and expression.connective[0].lower() != 'or' and expression.connective[0].lower() != 'xor':
         print('Error: unknown connective %s.' % expression.connective[0])
         return 0
 
@@ -172,6 +171,38 @@ def valid_symbol(symbol):
 # Add all your functions here
 
 
+def return_expression(expression):
+    if expression == 0 or expression == None or expression == '':
+        print('\nINVALID\n')
+
+    elif expression.symbol[0]:  # If it is a base case (symbol)
+        s = expression.symbol[0]
+
+    else:  # Otherwise it is a subexpression
+        s = '('
+        if expression.connective[0] == 'or' or expression.connective[0] == 'and' or expression.connective[0] == 'xor':
+            for i in range(len(expression.subexpressions)):
+                s += ' '
+                s += return_expression(expression.subexpressions[i])
+                if i != len(expression.subexpressions) - 1:
+                    s += ' '
+                    s += expression.connective[0]
+        elif expression.connective[0] == 'if' or expression.connective[0] == 'iff':
+            s += return_expression(expression.subexpressions[0])
+            s += ' '
+            if expression.connective[0] == 'if':
+                s += 'impl'
+            else:
+                s += expression.connective[0]
+            s += ' '
+            s += return_expression(expression.subexpressions[1])
+        else:
+            s += 'not '
+            s += return_expression(expression.subexpressions[0])
+        s += ')'
+    return s
+
+
 def extract_symbols(expression, symbols):
     if expression.symbol[0]:
         return expression.symbol[0]
@@ -188,74 +219,84 @@ def clean_list(duplicate):
     return final_list
 
 
+def cleanNullTerms(d):
+    return {
+        k: v
+        for k, v in d.items()
+        if v is not None
+    }
+
+
 def populate_truth_table(knowledge_base, truth_table):
     for subexpression in knowledge_base.subexpressions:
         if subexpression.connective == ['not']:
             if subexpression.subexpressions[0].symbol[0]:
                 truth_table[subexpression.subexpressions[0].symbol[0]] = False
         elif subexpression.connective == ['']:
-            if subexpression.subexpressions[0].symbol[0]:
+            if subexpression.symbol[0]:
                 truth_table[subexpression.symbol[0]] = True
 
 
 def entail(knowledge_base, truth_table, statement):
-    if statement.symbol[0]:
-        if truth_table[statement.symbol[0]] is None:
-            return [True, False]
-        else:
-            return [truth_table[statement.symbol[0]]]
-    elif statement.connective[0] == 'not':
-        return [not n for n in entail(knowledge_base, truth_table, statement.subexpressions[0])]
-    elif statement.connective[0] == 'or':
-        temp = []
-        for substatement in statement.subexpressions:
-            temp.append(entail(knowledge_base, truth_table, substatement))
-        possibilities = list(product(*temp))
-        table = []
-        for combination in possibilities:
-            table.append(True in combination)
-        return table
-    elif statement.connective[0] == 'and':
-        temp = []
-        for substatement in statement.subexpressions:
-            temp.append(entail(knowledge_base, truth_table, substatement))
-        possibilities = list(product(*temp))
-        table = []
-        for combination in possibilities:
-            table.append(not False in combination)
-        return table
-    elif statement.connective[0] == 'if':
-        p = entail(knowledge_base, truth_table, statement.subexpressions[0])
-        q = entail(knowledge_base, truth_table, statement.subexpressions[1])
-        temp = [p, q]
-        possibilities = list(product(*temp))
-        table = []
-        for combination in possibilities:
-            if not possibilities[0]:
-                table.append(True)
-            elif possibilities[0] and possibilities[1]:
-                table.append(True)
-            else:
-                table.append(False)
-        return table
-    elif statement.connective[0] == 'iff':
-        p = entail(knowledge_base, truth_table, statement.subexpressions[0])
-        q = entail(knowledge_base, truth_table, statement.subexpressions[1])
-        temp = [p, q]
-        possibilities = list(product(*temp))
-        table = []
-        for combination in possibilities:
-            table.append(
-                (possibilities[0] and possibilities[1]) or (not possibilities[0] and not possibilities[1]))
-        return table
+    kb = BooleanExpression(knowledge_base)
+    t = cleanNullTerms(truth_table)
+
+    combinations = []
+    with kb.constrain(**t):
+         for c in kb.sat_all():
+            combinations.append(c)
+    # print(len(combinations))
+
+
+    kb_true = '{} and {}'.format(knowledge_base, statement)
+    kb_true = BooleanExpression(kb_true)
+
+
+    combinations_true = []
+    with kb_true.constrain(**t):
+         for c in kb_true.sat_all():
+            combinations_true.append(c)
+
+    # print('True')
+    # print(len(combinations_true))
+    # for c in combinations_true:
+    #     print(c)
+
+    kb_false = '{} and (not {})'.format(knowledge_base, statement)
+    kb_false = BooleanExpression(kb_false)
+
+    combinations_false = []
+    with kb_false.constrain(**t):
+         for c in kb_false.sat_all():
+            combinations_false.append(c)
+
+    # print('False')
+    # print(len(combinations_false))
+    # for c in combinations_false:
+    #     print(c)
+
+    if len(combinations_true) == len(combinations) and len(combinations_false) == len(combinations):
+        print('BTF')
+        return 'BTF'
+    elif len(combinations_true) == len(combinations) and len(combinations_false) != len(combinations):
+        print('DT')
+        return 'DT'
+    elif len(combinations_true) != len(combinations) and len(combinations_false) == len(combinations):
+        print('DF')
+        return 'DF'
+    else:
+        print('PTF')
+        return 'PTF'
 
 
 def check_true_false(knowledge_base, truth_table, statement):
-    result = entail(knowledge_base, truth_table, statement)
-    statement.connective[0]
-    if False not in result:
-        return 'Definitely True'
-    elif True not in result:
-        return 'Definitely False'
-    else:
-        return ''
+    case = entail(knowledge_base, truth_table, statement)
+    with open('result.txt', 'w') as file:
+        if case == 'BTF':
+            file.write('both true and false')
+        elif case == 'DT':
+            file.write('definitely true')
+        elif case == 'DF':
+            file.write('definitely false')
+        else:
+            file.write('possibly true, possibly false')

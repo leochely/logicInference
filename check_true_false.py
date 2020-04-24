@@ -19,6 +19,7 @@
 
 import sys
 from logical_expression import *
+from tt import BooleanExpression
 
 
 def main(argv):
@@ -73,13 +74,17 @@ def main(argv):
         sys.exit('invalid knowledge base')
 
     # I had left this line out of the original code. If things break, comment out.
-    print_expression(knowledge_base, '\n')
+    # print_expression(knowledge_base, '\n')
 
     extract_symbols(knowledge_base, symbols)
     symbols = clean_list(symbols)
     truth_table = {k: None for _, k in enumerate(symbols)}
-
     populate_truth_table(knowledge_base, truth_table)
+
+
+    knowledge_base = return_expression(knowledge_base)
+    print(knowledge_base)
+
 
     # Read statement whose entailment we want to determine
     try:
@@ -101,8 +106,10 @@ def main(argv):
     print_expression(statement, '')
     print('\n')
 
+    statement = return_expression(statement)
+
     # Run the statement through the inference engine
-    print(check_true_false(knowledge_base, truth_table, statement))
+    check_true_false(knowledge_base, truth_table, statement)
 
     sys.exit(1)
 
